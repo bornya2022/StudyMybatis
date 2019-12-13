@@ -1,11 +1,20 @@
-import  java.io.InputSream
+import com.java_study.mybatis.mapper.UserMapper;
+import com.java_study.mybatis.model.User;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 public class UserTest{
     private  static SqlSessionFactory sqlSessionFactory;
 
     public static void main(String[] args){
         //mybatis配置文件
-        String resource ="mybatis.cfg.xml";
+        String resource = "mybatis.cfg.xml";
         //得到配置源
         InputStream inputStream=null;
         try {
@@ -16,10 +25,10 @@ public class UserTest{
         // 创建会话工厂，传入 MyBatis 的配置文件信息
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 
-        insertUser();
+        //insertUser();
         // updateUser();
         // deleteUser();
-        // selectUserById();
+        selectUserById();
         // selectAllUser();
 
     }

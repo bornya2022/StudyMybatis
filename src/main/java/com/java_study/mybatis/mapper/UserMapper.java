@@ -26,18 +26,18 @@ public interface UserMapper {
      * @return
      * @throws Exception
      */
-    public int deleteUser(User user) throws Exception;
+    public int deleteUser(int id ) throws Exception;
     /*
      * 根据 id 查询用户信息
      * @param id
      * @return
      * @throws Exception
      */
-    public User selectUser(User user) throws Exception;
+    public User selectUserById(int id) throws Exception;
     /*
      * 查询所有的用户信息
      * @return
      * @throws Exception
      */
-    public List<User> selectAllUSer() throws Exception;
+    public List<User> selectAllUser() throws Exception;
 }

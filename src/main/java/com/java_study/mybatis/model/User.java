@@ -1,6 +1,6 @@
 package com.java_study.mybatis.model;
 
-import com.sun.org.apache.xpath.internal.operations.String;
+
 
 public class User {
     private Integer id;
@@ -48,4 +48,5 @@ public class User {
     public void setAddress(String address) {
         this.address = address;
     }
+
 }
