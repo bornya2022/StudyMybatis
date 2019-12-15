@@ -63,5 +63,6 @@ public class MyTypeHandler implements TypeHandler<String>{
         String result=callableStatement.getString(i);
         logger.info("读取string参数3【"+result+"】");
         return result;
+
     }
 }
