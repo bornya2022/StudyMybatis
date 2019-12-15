@@ -2,11 +2,20 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <!--settings常见设置-->
+    <settings>
+        <!--缓存相关，默认true-->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
     <!-- 为 JavaBean 起类别名 -->
     <typeAliases>
         <!-- 指定一个包名起别名，将包内的 Java 类的类名作为类的类别名 -->
         <package name="com.java_study.mybatis.model"/>
     </typeAliases>
+    <!--配置类型转换器typeHandler-->
+    <typeHandlers>
+        <typeHandler jdbcType="VARCHAR" javaType="String" handler="com.java_study.mybatis.typeHandler.MyTypeHandler"/>
+    </typeHandlers>
     <!-- 配置 mybatis 运行环境 -->
     <environments default="development">
         <environment id="development">
@@ -15,10 +24,13 @@
             <!-- POOLED 表示支持 JDBC 数据源连接池 -->
             <!-- 数据库连接池，由 Mybatis 管理，数据库名是 mybatis，MySQL 用户名 root，密码为空 -->
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://localhost:3306/mybatis" />
+                <!--JDBC连接Mysql5 com.mysql.jdbc.Driver-->
+                <!--JDBC连接Mysql6及以上 com.mysql.cj.jdbc.Driver， 需要指定时区serverTimezone-->
+                <property name="driver" value="com.mysql.cj.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC" />
+                <!--mysql6.0以上需要在url后添加serverTimezone=UTC-->
                 <property name="username" value="root" />
-                <property name="password" value="123456789"/>
+                <property name="password" value="123456"/>
             </dataSource>
         </environment>
     </environments>

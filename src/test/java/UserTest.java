@@ -28,8 +28,8 @@ public class UserTest{
         //insertUser();
         // updateUser();
         // deleteUser();
-        selectUserById();
-        // selectAllUser();
+        //selectUserById();
+         selectAllUser();
 
     }
     // 新增用戶
