@@ -11,6 +11,7 @@
     <typeAliases>
         <!-- 指定一个包名起别名，将包内的 Java 类的类名作为类的类别名 -->
         <package name="com.java_study.mybatis.model"/>
+
     </typeAliases>
     <!--配置类型转换器typeHandler-->
     <typeHandlers>
