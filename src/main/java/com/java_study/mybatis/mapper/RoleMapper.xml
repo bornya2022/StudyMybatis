@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.java_study.mybatis.mapper.RoleMapper">
+    <!--自定义结果集,结果集的存储一般有2种：直接使用map存储（可读性性下降）;自定义结果集，在resultMap中引入POJO用于存储-->
+    <!--resultMap作用：定义映射规则（SQL到JavaBean的映射）；级联的更新；定制类型转化器-->
+    <resultMap id="roleMap" type="role">
+        <id property="id" column="id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="note" column="note"/>
+    </resultMap>
 
     <insert id="insertRole" parameterType="role">
         insert  into  t_role(role_name,notes) values (#{roleName},#{note})
     </insert>
-
+    <!--useGeneratedKey采用JDBC的Statement对象的getGenerateKeys方法返回主键，默认参数为false-->
+    <!--keyProperty说明使用那个pojo的属性去匹配主键-->
+    <insert id="insertRolekeys" parameterType="role" useGeneratedKeys="true" keyProperty="id">
+        insert  into  t_role(role_name,notes) values (#{roleName},#{note})
+    </insert>
+    <!--自定义主键,采用selectKey元素设置-->
+    <insert id="insertRoleMyKeys" parameterType="role">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            <!--自定义主键规则：记录为空则主键为1；记录不为空，id为当前id+3-->
+            select if (max(id)=null,1,max (id)+3) from t_role
+        </selectKey>
+        insert  into  t_role(role_name,notes) values (#{roleName},#{note})
+    </insert>
     <delete id="deleteRole" parameterType="long">
         delete  from t_role where id=#{id}
     </delete>
@@ -21,5 +40,23 @@
     <select id="findRoles" parameterType="string" resultType="role">
         select id role_name,as roleName,note from t_role
         where role_name like concat('%',#{roleName},'%')
+    </select>
+    <!--使用@Param传递多个参数，不需要给出参数类型，Mybatis会自动检索-->
+    <select id="findRoleByAnntation" resultType="role">
+        select id, role_name as roleName,note from t_role
+        where role_name like concat('%',#{roleName},'%')
+        and note like concat('%',#{note},'%')
+    </select>
+    <!--通过JavaBean传递多个参数-->
+    <select id="findRoleByBean" parameterType="com.java_study.mybatis.Params.RoleParams" resultType="role">
+        select id, role_name as roleName,note from t_role
+        where role_name like concat('%',#{roleName},'%')
+        and note like concat('%',#{note},'%')
+    </select>
+    <!--分页查询-->
+    <select id="findByRowBounds" resultType="role">
+        select id, role_name as roleName,note from t_role
+        where role_name like concat('%',#{roleName},'%')
+        and note like concat('%',#{note},'%')
     </select>
 </mapper>
