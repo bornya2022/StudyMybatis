@@ -6,6 +6,7 @@ package com.java_study.mybatis.model.system;
 public class EmployeeTask {
     private Long id;
     private Long empId;
+    //雇员任务表和任务一对一级联
     private Task task=null;
     private String taskName;
     private String note;

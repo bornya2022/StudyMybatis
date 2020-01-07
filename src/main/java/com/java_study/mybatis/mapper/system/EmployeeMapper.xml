@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java_study.mybatis.mapper.system.EmployeeMapper">
+    <resultMap id="employee" type="com.java_study.mybatis.model.system.Employee">
+        <id column="id" property="id"/>
+        <result column="real_name" property="realName"/>
+        <!--自定义枚举类型-->
+        <result column="sex" property="sex" typeHandler="com.java_study.mybatis.typeHandler.SexTypeHandler"/>
+        <result column="birthday" property="birthday"/>
+        <result column="moblie" property="moblie"/>
+        <result column="email" property="email"/>
+        <result column="position" property="position"/>
+        <result column="note" property="note"/>
+        <!--和工牌建立一对一级联关系-->
+        <association property="workCard" column="id"
+                     select="com.java_study.mybatis.mapper.system.WorkCardMapper.getWorkCardByEmpId"/>
+        <!--使用collection元素与任务列表建立一对多级联关系-->
+        <collection property="employeeTaskList" column="id"
+                    select="com.java_study.mybatis.mapper.system.EmployeeTaskMapper.getEmployeeTaskByEmpId"/>
+        <!--鉴别器-->
+        <discriminator javaType="long" column="sex">
+            <case value="1" resultMap="maleHealthFormMapper"/>
+            <case value="2" resultMap="femaleHealthFormMapper"/>
+        </discriminator>
+    </resultMap>
+    <!--自定义女性体检表结果集，继承雇员父结果集-->
+    <resultMap id="maleHealthFormMapper" type="com.java_study.mybatis.model.system.MaleHealthForm" extends="employee">
+        <association property="maleHealthForm" column="id"
+                     select="com.java_study.mybatis.mapper.system.FemaleHealthFormMapper.getMaleHealthForm"/>
+    </resultMap>
+    <!--自定义男性性体检表结果集，继承雇员父结果集-->
+    <resultMap id="femaleHealthFormMapper" type="com.java_study.mybatis.model.system.FemaleHealthForm" extends="employee">
+        <association property="femaleHealthForm" column="id"
+                     select="com.java_study.mybatis.mapper.system.MaleHealthFormMapper.getFemaleHealthForm"/>
+    </resultMap>
+    <select id="getEmployee" parameterType="long" resultMap="employee">
+        select id ,real_name,sex,birthday,mobile,email,position,note from t_employee where id=#{id}
+    </select>
+</mapper>

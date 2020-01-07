@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java_study.mybatis.mapper.system.FemaleHealthFormMapper">
+    <!--parameterType元素不能多加空格-->
+    <select id="getFemaleHealthForm" parameterType="long" resultType="com.java_study.mybatis.model.system.FemaleHealthForm">
+        select id,heart,liver,spleen,lung,kideny,uterus,note from t_female_health_from where emp_id=#{id}
+    </select>
+</mapper>

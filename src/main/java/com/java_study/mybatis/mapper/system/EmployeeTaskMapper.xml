@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java_study.mybatis.mapper.system.EmployeeTaskMapper">
+
+    <resultMap id="EmployeeTaskMap" type="com.java_study.mybatis.model.system.EmployeeTask">
+        <id column="id" property="id"/>
+        <result column="emp_id" property="empId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="note" property="note"/>
+        <!--雇员任务表和任务是一对一级联关系-->
+        <!--通过association元素创建一对一级联关系，property元素将其映射到POJO上-->
+        <!--select配置：namesapce+sqlId-->
+        <association property="task" column="task_id"
+                     select="com.java_study.mybatis.mapper.system.TaskMapper.getTask"/>
+    </resultMap>
+    <select id="getEmployeeTaskByEmpId" resultMap="EmployeeTaskMap">
+        select id ,emp_id,task_name,task_id,note from t_employee_task where emp_id=#{empId}
+    </select>
+</mapper>
