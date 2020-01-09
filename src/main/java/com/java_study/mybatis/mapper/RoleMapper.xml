@@ -8,7 +8,8 @@
         <result property="roleName" column="role_name"/>
         <result property="note" column="note"/>
     </resultMap>
-
+    <!--二级缓存开启-->
+    <cache/>
     <insert id="insertRole" parameterType="role">
         insert  into  t_role(role_name,notes) values (#{roleName},#{note})
     </insert>

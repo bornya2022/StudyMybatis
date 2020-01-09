@@ -6,6 +6,10 @@
     <settings>
         <!--缓存相关，默认true-->
         <setting name="cacheEnabled" value="true"/>
+        <!--lazyLoadingEnabled元素：延迟加载的全局开关，默认值为flase-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--aggressiveLazyLoading元素：层级加载开关，同一层级一起加载，默认值为flase-->
+        <setting name="aggressiveLazyLoading" value="true"/>
     </settings>
     <!-- 为 JavaBean 起类别名 -->
     <typeAliases>
