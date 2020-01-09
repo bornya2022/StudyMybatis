@@ -89,3 +89,83 @@ Mybatis的缓存分为2种，分别是一级缓存和二级缓存。
 Cache Hit Ratio [com.java_study.mybatis.mapper.RoleMapper]: 0.0
 ```
 
+### 1.3动态SQL
+
+![img](https://images2018.cnblogs.com/blog/1001990/201804/1001990-20180420091927414-873899959.png)
+
+##### 动态SQL的元素
+
+| 元素                    | 作用                         | 备注                    |
+| ----------------------- | ---------------------------- | ----------------------- |
+| if                      | 判断语句                     | 单条件分支判断          |
+| choose、when、otherwise | 相当于Java中的 case when语句 | 多条件分支判断          |
+| trim、where、set        | 辅助元素                     | 用于处理一些SQL拼装问题 |
+| foreach                 | 循环语句                     | 在in语句等列举条件常用  |
+
+对应实例：
+
+```xml
+<!--动态SQL之if和test标签的应用（单条件分支），实现简单的参数判空，减少多余数据-->
+    <select id="findRoles01" parameterType="string" resultType="roleMap">
+        select id role_name,as roleName,note from t_role where 1=1
+        <if test="roleName!=null and roleName!=''">
+            and  role_name like concat('%',#{roleName},'%')
+        </if>
+    </select>
+    <!--动态SQL之choose，when，otherwise标签的应用（多条件分支）-->
+    <select id="findRoles02" parameterType="string" resultType="roleMap">
+        select id role_name,as roleName,note from t_role where 1=1
+        <choose>
+            <when test="roleNo!=null and roleNo!=''">
+                and role_no=#{roleNo}
+            </when>
+            <when test="roleName!=null and roleName!=''">
+                and role_name like concat('%',#{roleName},'%')
+            </when>
+            <otherwise>
+                and note is not null
+            </otherwise>
+        </choose>
+    </select>
+    <!--动态SQL之where标签的应用（辅助元素），where内条件成立，拼接内部的动态SQL-->
+    <select id="findRoles03" parameterType="string" resultType="roleMap">
+        select id role_name,as roleName,note from t_role
+        <where>
+            <if test="roleName!=null and roleName!=''">
+                and  role_name like concat('%',#{roleName},'%')
+            </if>
+        </where>
+    </select>
+    <!--动态SQL之trim标签的应用（辅助元素），去掉特殊的SQL语法，列如and，or等-->
+    <!--prefix元素语句的前缀，prefixOverrides元素代表需要去掉的字符串-->
+    <select id="findRoles04" parameterType="string" resultType="roleMap">
+        select id role_name,as roleName,note from t_role
+        <trim prefix="where" prefixOverrides="and">
+            <if test="roleName!=null and roleName!=''">
+                and  role_name like concat('%',#{roleName},'%')
+            </if>
+        </trim>
+    </select>
+<!--动态SQl之set标签应用，对于联合主键，或者多个字段主键的数据更新，避免使用多条SQL进行更新-->
+    <update id="updateRole01" parameterType="role">
+        update t_role
+        <set>
+            <if test="roleName!=null and roleName!=''">
+                role_name=#{roleName}
+            </if>
+            <if test="note!=null and note!=''">
+                note=#{note}
+            </if>
+        </set>
+        where role_no=#{roleNo}
+    </update>
+    <!--动态SQL之foreach标签的应用（循环遍历），能够很好的支持数组，list，set接口的几个，并且对此提供遍历功能。-->
+    <!--foreac常用于in关键字（多值查询，包含查询，注意：对于大量数据，in会消耗大量性能）-->
+    <select id="findUserBySex" resultType="role">
+        select * from t_role where role_no in
+        <foreach collection="roleNoList" item="roleNo" index="index" open="(" separator="," close=")">
+            #{roleNo}
+        </foreach>
+    </select>
+```
+
